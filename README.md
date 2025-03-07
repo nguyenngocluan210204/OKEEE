@@ -1,5 +1,4 @@
 # OKEEE
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -58,7 +57,7 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-bottom: 10px; /* Thêm margin để tách nút tải xuống */
+            margin-bottom: 10px;
         }
 
         button:hover {
@@ -75,7 +74,7 @@
             text-align: center;
         }
 
-        #download-btn { /* Style cho nút tải xuống */
+        #download-btn {
             background-color: #4CAF50;
         }
 
@@ -115,7 +114,7 @@
             });
 
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = ''; // Xóa kết quả trước đó
+            resultsDiv.innerHTML = '';
 
             let loadedFrames = 0;
 
@@ -139,10 +138,8 @@
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    // Xác định ảnh là portrait hay landscape
                     const isPortrait = img.height > img.width;
 
-                    // Chọn frame ngẫu nhiên nếu có nhiều frame
                     const frameImage = frames.length > 1
                         ? frames[Math.floor(Math.random() * frames.length)]
                         : frames[0];
@@ -153,7 +150,6 @@
                     const tempCtx = tempCanvas.getContext('2d');
 
                     if (isPortrait && frameWidth > frameHeight) {
-                        // Xoay frame thành portrait
                         tempCanvas.width = frameHeight;
                         tempCanvas.height = frameWidth;
                         tempCtx.translate(frameHeight / 2, frameWidth / 2);
@@ -161,7 +157,6 @@
                         tempCtx.drawImage(frameImage, -frameWidth / 2, -frameHeight / 2);
                         [frameWidth, frameHeight] = [frameHeight, frameWidth];
                     } else if (!isPortrait && frameHeight > frameWidth) {
-                        // Xoay frame thành landscape
                         tempCanvas.width = frameHeight;
                         tempCanvas.height = frameWidth;
                         tempCtx.translate(frameHeight / 2, frameWidth / 2);
@@ -174,7 +169,6 @@
                         tempCtx.drawImage(frameImage, 0, 0);
                     }
 
-                    // Resize và cắt ảnh để khớp với khung
                     const scale = Math.max(frameWidth / img.width, frameHeight / img.height);
                     const scaledWidth = img.width * scale;
                     const scaledHeight = img.height * scale;
@@ -184,7 +178,6 @@
                     canvas.width = frameWidth;
                     canvas.height = frameHeight;
 
-                    // Vẽ ảnh đã cắt
                     ctx.drawImage(
                         img,
                         -cropX,
@@ -193,28 +186,24 @@
                         scaledHeight
                     );
 
-                    // Chồng khung lên ảnh (thay đổi ở đây)
-                    ctx.globalCompositeOperation = 'source-over'; // Hoặc 'destination-over'
+                    ctx.globalCompositeOperation = 'source-over';
                     ctx.drawImage(tempCanvas, 0, 0, frameWidth, frameHeight);
 
-                    // Thêm kết quả vào giao diện
                     const resultImg = document.createElement('img');
                     resultImg.src = canvas.toDataURL('image/png');
                     document.getElementById('results').appendChild(resultImg);
 
-                    // Hiển thị nút tải xuống sau khi xử lý ảnh
                     document.getElementById('download-btn').style.display = 'block';
                 };
             });
         }
 
-        // Thêm sự kiện click cho nút tải xuống
         document.getElementById('download-btn').addEventListener('click', () => {
             const resultImg = document.querySelector('.results img');
             if (resultImg) {
                 const link = document.createElement('a');
                 link.href = resultImg.src;
-                link.download = 'framed_image.png'; // Tên file tải xuống
+                link.download = 'framed_image.png';
                 link.click();
             }
         });
